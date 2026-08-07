@@ -1,0 +1,11 @@
+[tool.pyright]
+# Resolve imports from the project venv (editable tilemap_parser),
+# NOT the stale system-site-packages copy.
+venvPath = "."
+venv = ".venv"
+reportUnannotatedClassAttribute=false
+reportUninitializedInstanceVariable=false
+reportUnusedCallResult=false
+reportMissingTypeStubs=false
+reportUnknownMemberType=false
+reportIgnoreCommentWithoutRule=false

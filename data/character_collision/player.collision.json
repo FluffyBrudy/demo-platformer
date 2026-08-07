@@ -1,0 +1,17 @@
+{
+  "name": "player",
+  "shape": {
+    "type": "rectangle",
+    "width": 12.007371755975182,
+    "height": 25.939655754693398,
+    "offset": [
+      7.666666666666667,
+      9.461082171397832
+    ]
+  },
+  "properties": {
+    "collision_layer": 1,
+    "collision_mask": 65535
+  },
+  "image_path": "/Users/upstem/Desktop/platformer/assets/data/images/entities/player_sheet2x.png"
+}

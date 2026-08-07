@@ -1,0 +1,27 @@
+{
+    "base_path": "/Users/upstem/Desktop/platformer",
+    "data_path": "data",
+    "collision_paths": {
+        "tileset": "collision",
+        "character": "character_collision"
+    },
+    "nodes_path": "nodes",
+    "theme": "semi_light",
+    "themes_list": [
+        "dark",
+        "molokai",
+        "light",
+        "semi_light"
+    ],
+    "error_handler": {
+        "log_path": "errors.log",
+        "max_recent_errors": 50,
+        "console_output": true,
+        "file_logging": true,
+        "severity_levels": [
+            "error",
+            "warning",
+            "info"
+        ]
+    }
+}
