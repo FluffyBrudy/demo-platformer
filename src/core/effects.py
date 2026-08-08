@@ -1,8 +1,9 @@
 import math
+from typing import TypedDict
 
 import pygame
 from pygame.surface import Surface
-from tilemap_parser import ICollidable, get_shape_aabb
+from tilemap_parser import ICollidable, ParticleSystem, get_shape_aabb
 
 
 class Spotlight:
@@ -48,3 +49,34 @@ class Spotlight:
         self.light.blit(self.glow, self.glow.get_rect(center=(cx, cy)), special_flags=pygame.BLEND_RGBA_ADD)
         scaled = pygame.transform.smoothscale(self.light, (self.vw, self.vh))
         surface.blit(scaled, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
+
+
+class ParticleConsumer(TypedDict):
+    x: float
+    y: float
+    name: str
+
+
+class ParticleConsumerPartial(ParticleConsumer, total=False):
+    count: int
+    direction: float
+    width: int
+    height: int
+    offset: tuple[int, int]
+
+
+def particle_consumer(
+    particle_lookup: dict[str, ParticleSystem],
+    config: ParticleConsumerPartial,
+):
+    """This is mutable, ensure that direction is always included whoever consumes"""
+    x = config["x"]
+    y = config["y"]
+    name = config["name"]
+    count = config.get("count", 5)
+    direction = config.get("direction", 0.0)
+    width = config.get("width", 1)
+    height = config.get("height", 1)
+
+    particle_lookup[name].config.direction = direction
+    particle_lookup[name].emit_burst(count, x, y, width, height)

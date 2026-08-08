@@ -7,10 +7,13 @@ from tilemap_parser import (
     CollisionRunner,
     ICollidableSprite,
     SpriteAnimationSet,
+    get_shape_aabb,
     load_character_collision,
 )
 
+from src.core.effects import ParticleConsumerPartial
 from src.settings import ANIMATION_PATH, CHARACTER_COLLISION_PATH
+from src.shared.signals import dashorb
 
 INPUT_DELAY_THRESHOLD = 0.15
 
@@ -41,6 +44,7 @@ class Player(ICollidableSprite):
         self.vy = 0
         self.on_ground = False
         self.collision_shape = load_character_collision(self.collision_path).shape
+        self.shape_aabb = get_shape_aabb(self.x, self.y, self.collision_shape)
 
         self.jump_triggered = False
         self.input_x = 0
@@ -62,35 +66,48 @@ class Player(ICollidableSprite):
 
     def update(self, dt: float, runner: CollisionRunner):
         keys = pygame.key.get_pressed()
-        movement_x = keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]
-        self.jump_triggered = False
+        self.shape_aabb = get_shape_aabb(self.x, self.y, self.collision_shape)
+        l, t, r, b = self.shape_aabb
 
-        if keys[pygame.K_SPACE]:
-            self.jump_triggered = True
+        movement_x = keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]
+        self.jump_triggered = keys[pygame.K_SPACE]
+
+        if self.on_ground:
+            if self.vx < 0:
+                emit_particle(r, b, 0, count=1)
+            elif self.vx > 0:
+                emit_particle(l, b, 180, count=1)
+
         if movement_x:
-            if movement_x < 0:
-                self.flipped = True
-            else:
-                self.flipped = False
-            self.input_x = movement_x * (0.5 if self.vy > 0.01 else 1)
+            self.flipped = movement_x < 0
+            self.input_x = movement_x * (0.5 if self.vy > 0.01 else 1.0)
         else:
-            self.input_x = 0
+            self.input_x = 0.0
 
         if self.jump_triggered and self.on_ground:
             self.vy = runner.jump_strength
-        if not self.on_ground:
-            self.vy = min(self.vy + runner.gravity * dt, runner.max_fall_speed)
+            self.on_ground = False
+            emit_particle(r, (t + b) * 0.5, -1, count=20)
 
-        accel = GROUND_ACCEL if self.on_ground else AIR_ACCEL
-        if self.input_x:
-            self.vx = move_toward(self.vx, self.input_x * RUN_SPEED, accel * dt)
+        if not self.on_ground:
+            self.vy = min(
+                self.vy + runner.gravity * dt,
+                runner.max_fall_speed,
+            )
+
+        target_vx = self.input_x * RUN_SPEED
+        if self.input_x != 0:
+            accel = GROUND_ACCEL if self.on_ground else AIR_ACCEL
+            self.vx = move_toward(self.vx, target_vx, accel * dt)
         else:
             decel = GROUND_DECEL if self.on_ground else AIR_ACCEL
             self.vx = move_toward(self.vx, 0.0, decel * dt)
+
         state = self.get_state()
         if self.current_state != state:
             self.current_state = state
             self.animation_states[state].reset()
+
         self.animation_states[self.current_state].update(dt * 1000)
 
     def get_state(self) -> TPlayerStates:
@@ -111,3 +128,19 @@ class Player(ICollidableSprite):
         if self.flipped:
             current_frame = pygame.transform.flip(current_frame, True, False)
         surface.blit(current_frame, (self.x - offset[0], self.y - offset[1]))
+
+
+def emit_particle(
+    x: float, y: float, direction: float, count: int = 5, w: int = 1, h: int = 1, name: str = "dashorb"
+):
+    dashorb(
+        {
+            "x": x,
+            "y": y,
+            "count": count,
+            "direction": direction,
+            "width": w,
+            "height": h,
+            "name": name,
+        }
+    )

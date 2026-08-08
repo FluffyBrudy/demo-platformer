@@ -2,8 +2,8 @@
   "meta": {
     "tile_size": "16;16",
     "map_size": "40;25",
-    "zoom_level": 0.6999999999999985,
-    "scroll": "-264.3965884890456;-94.96872441284302",
+    "zoom_level": 0.8,
+    "scroll": "-61.66957573571085;-90.08609169879105",
     "offset": "0;0",
     "render_scale": 2.0,
     "version": "1.1"
@@ -4146,6 +4146,150 @@
         "variant": 15,
         "autotile_group": "grass",
         "gid": 15
+      },
+      "5;23": {
+        "pos": "5;23",
+        "ttype": 2,
+        "variant": 0,
+        "gid": 134
+      },
+      "16;21": {
+        "pos": "16;21",
+        "ttype": 2,
+        "variant": 0,
+        "gid": 134
+      },
+      "12;22": {
+        "pos": "12;22",
+        "ttype": 2,
+        "variant": 0,
+        "gid": 134
+      },
+      "33;15": {
+        "pos": "33;15",
+        "ttype": 2,
+        "variant": 0,
+        "gid": 134
+      },
+      "38;18": {
+        "pos": "38;18",
+        "ttype": 2,
+        "variant": 0,
+        "gid": 134
+      },
+      "35;21": {
+        "pos": "35;21",
+        "ttype": 2,
+        "variant": 0,
+        "gid": 134
+      },
+      "34;21": {
+        "pos": "34;21",
+        "ttype": 3,
+        "variant": 0,
+        "gid": 135
+      },
+      "33;21": {
+        "pos": "33;21",
+        "ttype": 3,
+        "variant": 0,
+        "gid": 135
+      },
+      "15;21": {
+        "pos": "15;21",
+        "ttype": 3,
+        "variant": 0,
+        "gid": 135
+      },
+      "25;21": {
+        "pos": "25;21",
+        "ttype": 1,
+        "variant": 0,
+        "gid": 133
+      },
+      "24;21": {
+        "pos": "24;21",
+        "ttype": 1,
+        "variant": 0,
+        "gid": 133
+      },
+      "21;22": {
+        "pos": "21;22",
+        "ttype": 1,
+        "variant": 0,
+        "gid": 133
+      },
+      "20;22": {
+        "pos": "20;22",
+        "ttype": 1,
+        "variant": 0,
+        "gid": 133
+      },
+      "9;21": {
+        "pos": "9;21",
+        "ttype": 3,
+        "variant": 0,
+        "gid": 135
+      },
+      "10;21": {
+        "pos": "10;21",
+        "ttype": 3,
+        "variant": 0,
+        "gid": 135
+      },
+      "8;21": {
+        "pos": "8;21",
+        "ttype": 3,
+        "variant": 0,
+        "gid": 135
+      },
+      "7;21": {
+        "pos": "7;21",
+        "ttype": 3,
+        "variant": 0,
+        "gid": 135
+      },
+      "30;13": {
+        "pos": "30;13",
+        "ttype": 1,
+        "variant": 0,
+        "gid": 133
+      },
+      "32;13": {
+        "pos": "32;13",
+        "ttype": 2,
+        "variant": 0,
+        "gid": 134
+      },
+      "31;13": {
+        "pos": "31;13",
+        "ttype": 2,
+        "variant": 0,
+        "gid": 134
+      },
+      "30;4": {
+        "pos": "30;4",
+        "ttype": 2,
+        "variant": 0,
+        "gid": 134
+      },
+      "36;9": {
+        "pos": "36;9",
+        "ttype": 2,
+        "variant": 0,
+        "gid": 134
+      },
+      "24;3": {
+        "pos": "24;3",
+        "ttype": 2,
+        "variant": 0,
+        "gid": 134
+      },
+      "26;3": {
+        "pos": "26;3",
+        "ttype": 2,
+        "variant": 0,
+        "gid": 134
       }
     },
     "layers": [
@@ -7829,6 +7973,150 @@
             "variant": 15,
             "autotile_group": "grass",
             "gid": 15
+          },
+          "5;23": {
+            "pos": "5;23",
+            "ttype": 2,
+            "variant": 0,
+            "gid": 134
+          },
+          "16;21": {
+            "pos": "16;21",
+            "ttype": 2,
+            "variant": 0,
+            "gid": 134
+          },
+          "12;22": {
+            "pos": "12;22",
+            "ttype": 2,
+            "variant": 0,
+            "gid": 134
+          },
+          "33;15": {
+            "pos": "33;15",
+            "ttype": 2,
+            "variant": 0,
+            "gid": 134
+          },
+          "38;18": {
+            "pos": "38;18",
+            "ttype": 2,
+            "variant": 0,
+            "gid": 134
+          },
+          "35;21": {
+            "pos": "35;21",
+            "ttype": 2,
+            "variant": 0,
+            "gid": 134
+          },
+          "34;21": {
+            "pos": "34;21",
+            "ttype": 3,
+            "variant": 0,
+            "gid": 135
+          },
+          "33;21": {
+            "pos": "33;21",
+            "ttype": 3,
+            "variant": 0,
+            "gid": 135
+          },
+          "15;21": {
+            "pos": "15;21",
+            "ttype": 3,
+            "variant": 0,
+            "gid": 135
+          },
+          "25;21": {
+            "pos": "25;21",
+            "ttype": 1,
+            "variant": 0,
+            "gid": 133
+          },
+          "24;21": {
+            "pos": "24;21",
+            "ttype": 1,
+            "variant": 0,
+            "gid": 133
+          },
+          "21;22": {
+            "pos": "21;22",
+            "ttype": 1,
+            "variant": 0,
+            "gid": 133
+          },
+          "20;22": {
+            "pos": "20;22",
+            "ttype": 1,
+            "variant": 0,
+            "gid": 133
+          },
+          "9;21": {
+            "pos": "9;21",
+            "ttype": 3,
+            "variant": 0,
+            "gid": 135
+          },
+          "10;21": {
+            "pos": "10;21",
+            "ttype": 3,
+            "variant": 0,
+            "gid": 135
+          },
+          "8;21": {
+            "pos": "8;21",
+            "ttype": 3,
+            "variant": 0,
+            "gid": 135
+          },
+          "7;21": {
+            "pos": "7;21",
+            "ttype": 3,
+            "variant": 0,
+            "gid": 135
+          },
+          "30;13": {
+            "pos": "30;13",
+            "ttype": 1,
+            "variant": 0,
+            "gid": 133
+          },
+          "32;13": {
+            "pos": "32;13",
+            "ttype": 2,
+            "variant": 0,
+            "gid": 134
+          },
+          "31;13": {
+            "pos": "31;13",
+            "ttype": 2,
+            "variant": 0,
+            "gid": 134
+          },
+          "30;4": {
+            "pos": "30;4",
+            "ttype": 2,
+            "variant": 0,
+            "gid": 134
+          },
+          "36;9": {
+            "pos": "36;9",
+            "ttype": 2,
+            "variant": 0,
+            "gid": 134
+          },
+          "24;3": {
+            "pos": "24;3",
+            "ttype": 2,
+            "variant": 0,
+            "gid": 134
+          },
+          "26;3": {
+            "pos": "26;3",
+            "ttype": 2,
+            "variant": 0,
+            "gid": 134
           }
         },
         "properties": {}
@@ -7927,9 +8215,152 @@
             "tileset_type": "object",
             "variant": 0,
             "properties": {}
+          },
+          "8": {
+            "area": {
+              "x": 259,
+              "y": 52,
+              "w": 33,
+              "h": 44
+            },
+            "ttype": 7,
+            "tileset_type": "object",
+            "variant": 0
+          },
+          "9": {
+            "area": {
+              "x": 398,
+              "y": 22,
+              "w": 33,
+              "h": 44
+            },
+            "ttype": 7,
+            "tileset_type": "object",
+            "variant": 0
+          },
+          "10": {
+            "area": {
+              "x": 62,
+              "y": 38,
+              "w": 33,
+              "h": 44
+            },
+            "ttype": 7,
+            "tileset_type": "object",
+            "variant": 0
+          },
+          "11": {
+            "area": {
+              "x": 594,
+              "y": 149,
+              "w": 25,
+              "h": 12
+            },
+            "ttype": 6,
+            "tileset_type": "object",
+            "variant": 0
+          },
+          "12": {
+            "area": {
+              "x": 594,
+              "y": 148,
+              "w": 25,
+              "h": 12
+            },
+            "ttype": 6,
+            "tileset_type": "object",
+            "variant": 0
+          },
+          "13": {
+            "area": {
+              "x": 448,
+              "y": 374,
+              "w": 25,
+              "h": 12
+            },
+            "ttype": 6,
+            "tileset_type": "object",
+            "variant": 0
+          },
+          "14": {
+            "area": {
+              "x": 467,
+              "y": 374,
+              "w": 25,
+              "h": 12
+            },
+            "ttype": 6,
+            "tileset_type": "object",
+            "variant": 0
+          },
+          "15": {
+            "area": {
+              "x": 487,
+              "y": 373,
+              "w": 25,
+              "h": 12
+            },
+            "ttype": 6,
+            "tileset_type": "object",
+            "variant": 0
+          },
+          "16": {
+            "area": {
+              "x": 502,
+              "y": 374,
+              "w": 25,
+              "h": 12
+            },
+            "ttype": 6,
+            "tileset_type": "object",
+            "variant": 0
+          },
+          "17": {
+            "area": {
+              "x": 424,
+              "y": 342,
+              "w": 25,
+              "h": 12
+            },
+            "ttype": 6,
+            "tileset_type": "object",
+            "variant": 0
+          },
+          "18": {
+            "area": {
+              "x": 356,
+              "y": 343,
+              "w": 25,
+              "h": 12
+            },
+            "ttype": 6,
+            "tileset_type": "object",
+            "variant": 0
+          },
+          "19": {
+            "area": {
+              "x": 561,
+              "y": 161,
+              "w": 16,
+              "h": 16
+            },
+            "ttype": 4,
+            "tileset_type": "object",
+            "variant": 0
+          },
+          "20": {
+            "area": {
+              "x": 47,
+              "y": 193,
+              "w": 16,
+              "h": 16
+            },
+            "ttype": 4,
+            "tileset_type": "object",
+            "variant": 0
           }
         },
-        "next_object_id": 8,
+        "next_object_id": 21,
         "properties": {}
       }
     ]
