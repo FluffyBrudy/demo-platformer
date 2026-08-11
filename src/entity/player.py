@@ -21,6 +21,9 @@ RUN_SPEED = 150.0
 GROUND_ACCEL = 2200.0
 GROUND_DECEL = 2600.0
 AIR_ACCEL = 1000.0
+JUMP_STRENGTH = -400
+MAX_FALL_SPEED = 600
+GRAVITY = 800
 
 
 def move_toward(current: float, target: float, by: float) -> float:
@@ -50,6 +53,7 @@ class Player(ICollidableSprite):
         self.input_x = 0
         self.prev_input = 0
         self.flipped = False
+        self.is_hitted = False
 
         sprite_animation_set = SpriteAnimationSet.load(self.animation_path)
         self.animation_states: dict[TPlayerStates, AnimationPlayer] = {
@@ -64,37 +68,35 @@ class Player(ICollidableSprite):
     def trigger_jump(self):
         self.jump_triggered: bool = True
 
-    def update(self, dt: float, runner: CollisionRunner):
-        keys = pygame.key.get_pressed()
+    def update(self, dt: float):
         self.shape_aabb = get_shape_aabb(self.x, self.y, self.collision_shape)
-        l, t, r, b = self.shape_aabb
-
+        keys = pygame.key.get_pressed()
         movement_x = keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]
         self.jump_triggered = keys[pygame.K_SPACE]
-
-        if self.on_ground:
-            if self.vx < 0:
-                emit_particle(r, b, 0, count=1)
-            elif self.vx > 0:
-                emit_particle(l, b, 180, count=1)
-
         if movement_x:
             self.flipped = movement_x < 0
             self.input_x = movement_x * (0.5 if self.vy > 0.01 else 1.0)
         else:
             self.input_x = 0.0
 
+        self.vertical_movement(dt)
+        self.horizontal_movement(dt)
+        self.update_animation(dt)
+
+    def vertical_movement(self, dt: float):
+        _, t, r, b = self.shape_aabb
         if self.jump_triggered and self.on_ground:
-            self.vy = runner.jump_strength
+            self.vy = JUMP_STRENGTH
             self.on_ground = False
             emit_particle(r, (t + b) * 0.5, -1, count=20)
 
         if not self.on_ground:
             self.vy = min(
-                self.vy + runner.gravity * dt,
-                runner.max_fall_speed,
+                self.vy + GRAVITY * dt,
+                MAX_FALL_SPEED,
             )
 
+    def horizontal_movement(self, dt: float):
         target_vx = self.input_x * RUN_SPEED
         if self.input_x != 0:
             accel = GROUND_ACCEL if self.on_ground else AIR_ACCEL
@@ -103,11 +105,18 @@ class Player(ICollidableSprite):
             decel = GROUND_DECEL if self.on_ground else AIR_ACCEL
             self.vx = move_toward(self.vx, 0.0, decel * dt)
 
+        l, _, r, b = self.shape_aabb
+        if self.on_ground:
+            if self.vx < 0:
+                emit_particle(r, b, 0, count=1)
+            elif self.vx > 0:
+                emit_particle(l, b, 180, count=1)
+
+    def update_animation(self, dt: float):
         state = self.get_state()
         if self.current_state != state:
             self.current_state = state
             self.animation_states[state].reset()
-
         self.animation_states[self.current_state].update(dt * 1000)
 
     def get_state(self) -> TPlayerStates:
@@ -130,10 +139,8 @@ class Player(ICollidableSprite):
         surface.blit(current_frame, (self.x - offset[0], self.y - offset[1]))
 
 
-def emit_particle(
-    x: float, y: float, direction: float, count: int = 5, w: int = 1, h: int = 1, name: str = "dashorb"
-):
-    dashorb(
+def emit_particle(x: float, y: float, direction: float, count: int = 5, w: int = 1, h: int = 1, name: str = "dashorb"):
+    dashorb.emit(
         {
             "x": x,
             "y": y,

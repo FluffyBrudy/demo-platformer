@@ -1,10 +1,13 @@
 from pathlib import Path
 
 import pygame
+import pygkit.lighting.blend as blend
 from pygame.surface import Surface
+from pygkit import LightMap, PointLight
 from tilemap_parser import (
     Camera,
     CollisionRunner,
+    ObjectCollisionManager,
     ParticleSystem,
     PhysicsWorld,
     TileLayerRenderer,
@@ -13,7 +16,8 @@ from tilemap_parser import (
     load_tileset_collision,
 )
 
-from src.core.effects import ParticleConsumerPartial, Spotlight, particle_consumer
+from src.core.effects import ParticleConsumerPartial, particle_consumer
+from src.entity.enemies.mushroom import Mushroom
 from src.entity.player import Player, emit_particle
 from src.settings import TILESET_COLLISION_PATH
 
@@ -41,16 +45,28 @@ class World:
         self.camera.follow(self.player)
         self.camera.lerp_speed = 5.0
 
-        self.spotlight = Spotlight(200, 0.1, viewport_w, viewport_h, self.player)
+        self.light_map = LightMap((viewport_w, viewport_h), scale=0.5)
+        self.light_map.set_ambient((0, 0, 0), 0.9)
+        self.player_point_light = PointLight(radius=200, color=(100, 255, 255), falloff="exp", exponent=2, intensity=5)
+
         self._load_particles(map_data)
         self.map_objects: list[tuple[Surface, float, float]] = []
         self._load_objects(map_data)
+
+        self._load_enemies()
 
     def _map_bounds(self, map_data: TilemapData) -> tuple[float, float, float, float]:
         tile_w, tile_h = map_data.tile_size
         ccount, rcount = map_data.map_size
         r = map_data.render_scale
         return (0, 0, tile_w * ccount * r, tile_h * rcount * r)
+
+    def _load_enemies(self):
+        self.enemies: list[Mushroom] = []
+        self.object_collision = ObjectCollisionManager()
+        mushroom = Mushroom(200, 300)
+        self.object_collision.add_object(mushroom)  # pyright: ignore
+        self.enemies.append(mushroom)
 
     def _load_objects(self, map_data: TilemapData) -> None:
         r = map_data.render_scale
@@ -80,13 +96,21 @@ class World:
 
     def update(self, dt: float) -> None:
         self.camera.update(dt)
-        self.player.update(dt, self.runner)
+        self.player.update(dt)
         cr = self.runner.move_platformer(self.player, None, None, dt, velocity=(self.player.vx, self.player.vy))
         if cr.collided:
             _, t, r, b = self.player.shape_aabb
             emit_particle(r, (t + b) * 0.5, -1, count=20)
         for name, system in self.particles.items():
             system.update(dt, *self.node_areas[name])
+        self.player_point_light.advance(dt)
+
+        for enemy in self.enemies:
+            self.runner.move_grounded(enemy, None, None, dt)
+
+        res = self.object_collision.check_object_first(self.player)  # pyright: ignore
+        if res is not None:
+            pass
 
     def consume_particles(self, config: ParticleConsumerPartial) -> None:
         particle_consumer(self.particles, config)
@@ -97,6 +121,12 @@ class World:
             screen.blit(surf, (x - cam_x, y - cam_y))
         self.renderer.render(screen, self.camera.offset)
         for system in self.particles.values():
-            system.draw(screen, self.camera.offset[0], self.camera.offset[1], 1.0, pygame.BLEND_RGBA_ADD)
+            system.draw(screen, self.camera.offset[0], self.camera.offset[1], 1.0, pygame.BLEND_RGB_MAX)
         self.player.render(screen, self.camera.offset)
-        self.spotlight.render(screen, self.camera.offset)
+
+        for enemy in self.enemies:
+            enemy.render(screen, self.camera.offset)
+
+        self.light_map.clear()
+        self.player_point_light.render(self.light_map, self.player.x, self.player.y)
+        self.light_map.apply(screen)

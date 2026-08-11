@@ -1,0 +1,17 @@
+{
+  "name": "mushroom",
+  "shape": {
+    "type": "rectangle",
+    "width": 29.123368272505516,
+    "height": 32.60821575810447,
+    "offset": [
+      25.140685431820998,
+      32.35929808056168
+    ]
+  },
+  "properties": {
+    "collision_layer": 1,
+    "collision_mask": 65535
+  },
+  "image_path": "/Users/upstem/Desktop/platformer/assets/data/images/entities/enemies/mushroom/spritesheet.png"
+}

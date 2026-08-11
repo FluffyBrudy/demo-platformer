@@ -1,0 +1,410 @@
+{
+  "spritesheet_path": "../../assets/data/images/entities/enemies/mushroom/spritesheet.png",
+  "tile_size": [
+    80,
+    64
+  ],
+  "grid_offset": [
+    0,
+    0
+  ],
+  "animations": {
+    "idle": {
+      "name": "idle",
+      "frames": [
+        {
+          "variant_id": 96,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 97,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 98,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 99,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 100,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 101,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 102,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": true,
+      "fps": 60.0
+    },
+    "run": {
+      "name": "run",
+      "frames": [
+        {
+          "variant_id": 120,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 121,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 122,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 123,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 124,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 125,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 126,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 127,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": true,
+      "fps": 60.0
+    },
+    "hurt": {
+      "name": "hurt",
+      "frames": [
+        {
+          "variant_id": 72,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 73,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 74,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 75,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 76,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": false,
+      "fps": 60.0
+    },
+    "stunned": {
+      "name": "stunned",
+      "frames": [
+        {
+          "variant_id": 144,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 145,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 146,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 147,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 148,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 149,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 150,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 151,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 152,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 153,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 154,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 155,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 156,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 157,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 158,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 159,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 160,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 161,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": false,
+      "fps": 60.0
+    },
+    "death": {
+      "name": "death",
+      "frames": [
+        {
+          "variant_id": 48,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 49,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 50,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 51,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 52,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 53,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 54,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 55,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 56,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 57,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 58,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 59,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 60,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 61,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 62,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": false,
+      "fps": 60.0
+    },
+    "attack_with_stun": {
+      "name": "attack_with_stun",
+      "frames": [
+        {
+          "variant_id": 24,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 25,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 26,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 27,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 28,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 29,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 30,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 31,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 32,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 33,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 34,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 35,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 36,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 37,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 38,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 39,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 40,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 41,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 42,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 43,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 44,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 45,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 46,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 47,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": false,
+      "fps": 60.0
+    },
+    "attack": {
+      "name": "attack",
+      "frames": [
+        {
+          "variant_id": 0,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 1,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 2,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 3,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 4,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 5,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 6,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 7,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 8,
+          "duration_ms": 100.0
+        },
+        {
+          "variant_id": 9,
+          "duration_ms": 100.0
+        }
+      ],
+      "loop": false,
+      "fps": 60.0
+    }
+  }
+}

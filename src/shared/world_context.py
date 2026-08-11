@@ -19,3 +19,4 @@ class WorldContext:
 
 
 world_context = WorldContext()
+collision_cache = CollisionCache()
