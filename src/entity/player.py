@@ -53,7 +53,6 @@ class Player(ICollidableSprite):
         self.input_x = 0
         self.prev_input = 0
         self.flipped = False
-        self.is_hitted = False
 
         sprite_animation_set = SpriteAnimationSet.load(self.animation_path)
         self.animation_states: dict[TPlayerStates, AnimationPlayer] = {
@@ -136,7 +135,7 @@ class Player(ICollidableSprite):
 
         if self.flipped:
             current_frame = pygame.transform.flip(current_frame, True, False)
-        surface.blit(current_frame, (self.x - offset[0], self.y - offset[1]))
+        surface.blit(current_frame, (self.x - offset[0], self.y - offset[1]), special_flags=pygame.BLEND_RGBA_MAX)
 
 
 def emit_particle(x: float, y: float, direction: float, count: int = 5, w: int = 1, h: int = 1, name: str = "dashorb"):

@@ -1,17 +1,20 @@
 from pathlib import Path
+from random import random
 
 import pygame
-import pygkit.lighting.blend as blend
 from pygame.surface import Surface
 from pygkit import LightMap, PointLight
+from pygkit.lighting import blend
 from tilemap_parser import (
     Camera,
     CollisionRunner,
+    ICollidableSprite,
     ObjectCollisionManager,
     ParticleSystem,
     PhysicsWorld,
     TileLayerRenderer,
     TilemapData,
+    get_shape_aabb,
     load_map,
     load_tileset_collision,
 )
@@ -20,8 +23,11 @@ from src.core.effects import ParticleConsumerPartial, particle_consumer
 from src.entity.enemies.mushroom import Mushroom
 from src.entity.player import Player, emit_particle
 from src.settings import TILESET_COLLISION_PATH
+from src.utils.coor import align_bottom_right
 
 RUNNER_SPEED = 150.0
+KNOCKBACK_FORCE = 350.0
+KNOCKBACK_UP = -200.0
 
 
 class World:
@@ -32,11 +38,9 @@ class World:
             raise ValueError("Unable to load collision tileset")
 
         self.render_scale = map_data.render_scale
-        self.renderer = TileLayerRenderer(map_data)
-        self.runner = CollisionRunner.from_world(
-            PhysicsWorld.from_map(map_data, collision_tileset, use_gids=True),
-            game_type="platformer",
-        )
+        self.renderer = TileLayerRenderer(map_data, include_hidden_layers=False)
+        self.physics_world = PhysicsWorld.from_map(map_data, collision_tileset, use_gids=True)
+        self.runner = CollisionRunner.from_world(self.physics_world, game_type="platformer")
         self.runner.horizontal_speed = RUNNER_SPEED
 
         self.player = Player(100, 150)
@@ -45,15 +49,12 @@ class World:
         self.camera.follow(self.player)
         self.camera.lerp_speed = 5.0
 
-        self.light_map = LightMap((viewport_w, viewport_h), scale=0.5)
-        self.light_map.set_ambient((0, 0, 0), 0.9)
-        self.player_point_light = PointLight(radius=200, color=(100, 255, 255), falloff="exp", exponent=2, intensity=5)
+        self.light_map = LightMap((viewport_w, viewport_h), scale=0.5, pixelated=True)
+        self.player_point_light = PointLight(radius=110, color=(100, 255, 255), falloff="exp", exponent=2, intensity=5)
 
         self._load_particles(map_data)
-        self.map_objects: list[tuple[Surface, float, float]] = []
         self._load_objects(map_data)
-
-        self._load_enemies()
+        self._load_enemies(map_data)
 
     def _map_bounds(self, map_data: TilemapData) -> tuple[float, float, float, float]:
         tile_w, tile_h = map_data.tile_size
@@ -61,17 +62,30 @@ class World:
         r = map_data.render_scale
         return (0, 0, tile_w * ccount * r, tile_h * rcount * r)
 
-    def _load_enemies(self):
-        self.enemies: list[Mushroom] = []
+    def _load_enemies(self, map_data: TilemapData):
         self.object_collision = ObjectCollisionManager()
-        mushroom = Mushroom(200, 300)
-        self.object_collision.add_object(mushroom)  # pyright: ignore
-        self.enemies.append(mushroom)
+        self.enemies: list[Mushroom] = []
+
+        Mushroom.check_ground_ahead = self.is_ground_ahead
+        Mushroom.runner = self.runner
+
+        enemies = map_data.get_object_surfaces("enemies", scaled=True)
+        if len(enemies) == 0:
+            raise TypeError("Enemy  layer not found")
+
+        for surf, x, y, _ in enemies:
+            mushroom = Mushroom(x, y, target=self.player)
+            new_x, new_y = align_bottom_right((x, y, *surf.size), mushroom.size)
+            mushroom.x = new_x
+            mushroom.y = new_y
+            self.object_collision.add_object(mushroom)  # pyright: ignore
+            self.enemies.append(mushroom)
 
     def _load_objects(self, map_data: TilemapData) -> None:
+        self.map_objects: list[tuple[Surface, float, float]] = []
         r = map_data.render_scale
         for layer in map_data.parsed.layers:
-            if layer.layer_type == "tile":
+            if layer.layer_type == "tile" or not layer.visible:
                 continue
             for surf, x, y, _ in map_data.get_object_surfaces(layer.name):
                 scaled_surf = pygame.transform.scale_by(surf, r)
@@ -94,6 +108,17 @@ class World:
                     particle.rect.h,
                 )
 
+    def is_ground_ahead(self, sprite: ICollidableSprite, direction: int) -> bool:
+        left, _, right, bottom = get_shape_aabb(sprite.x, sprite.y, sprite.collision_shape)
+        probe_x = right + direction if sprite.vx > 0.001 else left - direction
+        probe_y = bottom + 1
+        tile_x, tile_y = self.runner.get_tile_at(probe_x, probe_y)
+        tile_id = self.physics_world.tile_map.get((tile_x, tile_y))
+        return tile_id is not None and self.physics_world.tileset_collision.has_collision(tile_id)  # pyright: ignore
+
+    def consume_particles(self, config: ParticleConsumerPartial) -> None:
+        particle_consumer(self.particles, config)
+
     def update(self, dt: float) -> None:
         self.camera.update(dt)
         self.player.update(dt)
@@ -103,17 +128,24 @@ class World:
             emit_particle(r, (t + b) * 0.5, -1, count=20)
         for name, system in self.particles.items():
             system.update(dt, *self.node_areas[name])
+
         self.player_point_light.advance(dt)
 
         for enemy in self.enemies:
-            self.runner.move_grounded(enemy, None, None, dt)
+            enemy.update(dt)
 
         res = self.object_collision.check_object_first(self.player)  # pyright: ignore
         if res is not None:
-            pass
-
-    def consume_particles(self, config: ParticleConsumerPartial) -> None:
-        particle_consumer(self.particles, config)
+            other = res.other(self.player)  # pyright: ignore
+            nx, _ = res.normal
+            self.player.vx = -nx * KNOCKBACK_FORCE
+            self.player.vy = KNOCKBACK_UP * (-1 if _ < 0 else 1)
+            print(_)
+            if abs(nx) < 0.01:
+                if isinstance(other, Mushroom) and other.can_stun():
+                    other.stun()
+            else:
+                pass
 
     def render(self, screen: Surface) -> None:
         cam_x, cam_y = self.camera.offset
@@ -121,7 +153,7 @@ class World:
             screen.blit(surf, (x - cam_x, y - cam_y))
         self.renderer.render(screen, self.camera.offset)
         for system in self.particles.values():
-            system.draw(screen, self.camera.offset[0], self.camera.offset[1], 1.0, pygame.BLEND_RGB_MAX)
+            system.draw(screen, self.camera.offset[0], self.camera.offset[1], 1.0)
         self.player.render(screen, self.camera.offset)
 
         for enemy in self.enemies:
@@ -129,4 +161,4 @@ class World:
 
         self.light_map.clear()
         self.player_point_light.render(self.light_map, self.player.x, self.player.y)
-        self.light_map.apply(screen)
+        self.light_map.apply(screen, blend=blend.RGB_MULT)
