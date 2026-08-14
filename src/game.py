@@ -3,7 +3,6 @@ import sys
 import pygame
 
 from src.settings import MAPS_PATH
-from src.shared.signals import dashorb
 from src.world import World
 
 
@@ -18,7 +17,6 @@ class Game:
         self.running = True
         self._init()
         self.world = World(MAPS_PATH / "1.json", self.WIDTH, self.HEIGHT)
-        dashorb.connect(self.world.consume_particles)
 
     def _init(self) -> None:
         pygame.init()

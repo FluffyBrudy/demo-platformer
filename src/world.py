@@ -1,5 +1,4 @@
 from pathlib import Path
-from random import random
 
 import pygame
 from pygame.surface import Surface
@@ -21,7 +20,7 @@ from tilemap_parser import (
 
 from src.core.effects import ParticleConsumerPartial, particle_consumer
 from src.entity.enemies.mushroom import Mushroom
-from src.entity.player import Player, emit_particle
+from src.entity.player import Player
 from src.settings import TILESET_COLLISION_PATH
 from src.utils.coor import align_bottom_right
 
@@ -54,6 +53,7 @@ class World:
 
         self._load_particles(map_data)
         self._load_objects(map_data)
+        self.player.emit = self.consume_particles
         self._load_enemies(map_data)
 
     def _map_bounds(self, map_data: TilemapData) -> tuple[float, float, float, float]:
@@ -66,15 +66,12 @@ class World:
         self.object_collision = ObjectCollisionManager()
         self.enemies: list[Mushroom] = []
 
-        Mushroom.check_ground_ahead = self.is_ground_ahead
-        Mushroom.runner = self.runner
-
         enemies = map_data.get_object_surfaces("enemies", scaled=True)
         if len(enemies) == 0:
             raise TypeError("Enemy  layer not found")
 
         for surf, x, y, _ in enemies:
-            mushroom = Mushroom(x, y, target=self.player)
+            mushroom = Mushroom(x, y, self.runner, self.is_ground_ahead, self.consume_particles, target=self.player)
             new_x, new_y = align_bottom_right((x, y, *surf.size), mushroom.size)
             mushroom.x = new_x
             mushroom.y = new_y
@@ -125,7 +122,7 @@ class World:
         cr = self.runner.move_platformer(self.player, None, None, dt, velocity=(self.player.vx, self.player.vy))
         if cr.collided:
             _, t, r, b = self.player.shape_aabb
-            emit_particle(r, (t + b) * 0.5, -1, count=20)
+            self.player.emit({"x": r, "y": (t + b) * 0.5, "name": "dashorb", "direction": -1, "count": 20})
         for name, system in self.particles.items():
             system.update(dt, *self.node_areas[name])
 
@@ -137,15 +134,11 @@ class World:
         res = self.object_collision.check_object_first(self.player)  # pyright: ignore
         if res is not None:
             other = res.other(self.player)  # pyright: ignore
-            nx, _ = res.normal
+            nx, ny = res.normal
             self.player.vx = -nx * KNOCKBACK_FORCE
-            self.player.vy = KNOCKBACK_UP * (-1 if _ < 0 else 1)
-            print(_)
-            if abs(nx) < 0.01:
-                if isinstance(other, Mushroom) and other.can_stun():
-                    other.stun()
-            else:
-                pass
+            self.player.vy = KNOCKBACK_UP * (-1 if ny < 0 else 1)
+            if abs(nx) < 0.01 and isinstance(other, Mushroom) and other.can_stun():
+                other.stun()
 
     def render(self, screen: Surface) -> None:
         cam_x, cam_y = self.camera.offset
