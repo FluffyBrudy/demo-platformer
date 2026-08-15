@@ -7,7 +7,6 @@ from pygkit.lighting import blend
 from tilemap_parser import (
     Camera,
     CollisionRunner,
-    ICollidableSprite,
     ObjectCollisionManager,
     ParticleSystem,
     PhysicsWorld,
@@ -19,7 +18,7 @@ from tilemap_parser import (
 )
 
 from src.core.effects import ParticleConsumerPartial, particle_consumer
-from src.entity.base import CollidableAnimationEntity
+from src.entity.enemies.base import HorizontalGroundedEnemy
 from src.entity.enemies.mushroom import Mushroom
 from src.entity.player import Player
 from src.settings import TILESET_COLLISION_PATH
@@ -107,7 +106,7 @@ class World:
                     particle.rect.h,
                 )
 
-    def is_ground_ahead(self, sprite: Mushroom) -> bool:
+    def is_ground_ahead(self, sprite: HorizontalGroundedEnemy) -> bool:
         left, _, right, bottom = get_shape_aabb(sprite.x, sprite.y, sprite.collision_shape)
         probe_x = right + 1 if sprite.direction > 0.001 else left - 1
         probe_y = bottom + 1
