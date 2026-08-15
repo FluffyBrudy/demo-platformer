@@ -132,6 +132,13 @@ class World:
 
         for enemy in self.enemies:
             enemy.update(dt)
+            hit = self.object_collision.check_object_first(enemy)  # pyright: ignore
+            if hit is not None:
+                other = hit.other(enemy)  # pyright: ignore
+                if other is not self.player:  # pyright: ignore
+                    enemy.direction *= -1
+                    other.direction = enemy.direction * -1  # pyright: ignore
+                    hit.resolve()
 
         res = self.object_collision.check_object_first(self.player)  # pyright: ignore
         if res is not None:

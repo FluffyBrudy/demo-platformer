@@ -1,7 +1,13 @@
 from collections.abc import Callable
 from typing import override
 
-from tilemap_parser import AnimationPlayer, CollisionRunner, SpriteAnimationSet, load_character_collision
+from tilemap_parser import (
+    AnimationPlayer,
+    CollisionRunner,
+    SpriteAnimationSet,
+    get_shape_aabb,
+    load_character_collision,
+)
 
 from src.core.effects import ParticleConsumerPartial
 from src.entity.base import CollidableAnimationEntity
@@ -33,7 +39,15 @@ class Mushroom(HorizontalGroundedEnemy):
     ) -> None:
         super().__init__(x, y, runner, ground_check, emit, target)
 
-        self.collision_shape = load_character_collision(self.collision_path).shape  # pyright: ignore
+        collision = load_character_collision(self.collision_path)
+        if collision is None:
+            raise ValueError("Collision data not loaded")
+
+        self.collision_shape = collision.shape  # pyright: ignore
+        self.collision_mask = collision.collision_mask
+        self.collision_layer = collision.collision_layer
+
+        self.shape_aabb = get_shape_aabb(self.x, self.y, self.collision_shape)
 
         sprite_animation_set = SpriteAnimationSet.load(self.animation_path)
         self.animation_states: dict[str, AnimationPlayer] = {

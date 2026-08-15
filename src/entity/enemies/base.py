@@ -3,6 +3,7 @@ from collections.abc import Callable
 from random import choice, randint, random
 
 from tilemap_parser import CollisionResult, CollisionRunner
+from tilemap_parser.runtime.collision import should_collide
 
 from src.core.effects import ParticleConsumerPartial
 from src.entity.base import CollidableAnimationEntity
@@ -47,6 +48,8 @@ class HorizontalGroundedEnemy(CollidableAnimationEntity, ABC):
 
     def handle_target(self):
         if self.target is None:
+            return
+        if not should_collide(self, self.target):  # pyright: ignore
             return
         tl, tt, tr, tb = self.target.shape_aabb
         sl, st, sr, sb = self.shape_aabb

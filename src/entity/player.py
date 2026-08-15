@@ -40,7 +40,15 @@ class Player(CollidableAnimationEntity):
         self.vx = 0
         self.vy = 0
         self.on_ground = False
-        self.collision_shape = load_character_collision(self.collision_path).shape  # pyright: ignore
+
+        collision = load_character_collision(self.collision_path)
+        if collision is None:
+            raise ValueError("Collision data not loaded")
+
+        self.collision_shape = collision.shape  # pyright: ignore
+        self.collision_mask = collision.collision_mask
+        self.collision_layer = collision.collision_layer
+
         self.shape_aabb = get_shape_aabb(self.x, self.y, self.collision_shape)
 
         self.input_x = 0

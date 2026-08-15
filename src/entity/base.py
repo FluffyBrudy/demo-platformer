@@ -15,6 +15,8 @@ class CollidableAnimationEntity(ICollidableSprite, ABC):
     emit: Callable[[ParticleConsumerPartial], None]
     blend_flags: int = 0
     shape_aabb: tuple[float, float, float, float]
+    collision_mask: int = 0
+    collision_layer: int = 0
 
     def update(self, dt: float) -> None:
         self.shape_aabb = get_shape_aabb(self.x, self.y, self.collision_shape)
