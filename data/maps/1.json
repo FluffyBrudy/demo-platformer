@@ -2,8 +2,8 @@
   "meta": {
     "tile_size": "16;16",
     "map_size": "40;25",
-    "zoom_level": 0.8999999999999995,
-    "scroll": "65.89452682839146;-51.42919304189263",
+    "zoom_level": 1.4000000000000004,
+    "scroll": "84.79650340478702;-19.70189205510536",
     "offset": "0;0",
     "render_scale": 2.0,
     "version": "1.1"
@@ -77,106 +77,196 @@
       {
         "name": "Rule 1",
         "neighbors": [
-          [1, 0],
-          [0, 1]
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            1
+          ]
         ],
         "tileset_path": "../../assets/data/images/tiles.png",
         "tileset_index": 0,
-        "variant_ids": [0],
+        "variant_ids": [
+          0
+        ],
         "group_id": "grass"
       },
       {
         "name": "Rule 2",
         "neighbors": [
-          [-1, 0],
-          [1, 0],
-          [0, 1]
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            1
+          ]
         ],
         "tileset_path": "../../assets/data/images/tiles.png",
         "tileset_index": 0,
-        "variant_ids": [1],
+        "variant_ids": [
+          1
+        ],
         "group_id": "grass"
       },
       {
         "name": "Rule 3",
         "neighbors": [
-          [-1, 0],
-          [0, 1]
+          [
+            -1,
+            0
+          ],
+          [
+            0,
+            1
+          ]
         ],
         "tileset_path": "../../assets/data/images/tiles.png",
         "tileset_index": 0,
-        "variant_ids": [2],
+        "variant_ids": [
+          2
+        ],
         "group_id": "grass"
       },
       {
         "name": "Rule 4",
         "neighbors": [
-          [1, 0],
-          [0, -1],
-          [0, 1]
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            -1
+          ],
+          [
+            0,
+            1
+          ]
         ],
         "tileset_path": "../../assets/data/images/tiles.png",
         "tileset_index": 0,
-        "variant_ids": [7],
+        "variant_ids": [
+          7
+        ],
         "group_id": "grass"
       },
       {
         "name": "Rule 5",
         "neighbors": [
-          [0, 1],
-          [1, 0],
-          [-1, 0],
-          [0, -1]
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            -1,
+            0
+          ],
+          [
+            0,
+            -1
+          ]
         ],
         "tileset_path": "../../assets/data/images/tiles.png",
         "tileset_index": 0,
-        "variant_ids": [8],
+        "variant_ids": [
+          8
+        ],
         "group_id": "grass"
       },
       {
         "name": "Rule 6",
         "neighbors": [
-          [-1, 0],
-          [0, -1],
-          [0, 1]
+          [
+            -1,
+            0
+          ],
+          [
+            0,
+            -1
+          ],
+          [
+            0,
+            1
+          ]
         ],
         "tileset_path": "../../assets/data/images/tiles.png",
         "tileset_index": 0,
-        "variant_ids": [9],
+        "variant_ids": [
+          9
+        ],
         "group_id": "grass"
       },
       {
         "name": "Rule 7",
         "neighbors": [
-          [1, 0],
-          [0, -1]
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            -1
+          ]
         ],
         "tileset_path": "../../assets/data/images/tiles.png",
         "tileset_index": 0,
-        "variant_ids": [14],
+        "variant_ids": [
+          14
+        ],
         "group_id": "grass"
       },
       {
         "name": "Rule 8",
         "neighbors": [
-          [-1, 0],
-          [1, 0],
-          [0, -1]
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            -1
+          ]
         ],
         "tileset_path": "../../assets/data/images/tiles.png",
         "tileset_index": 0,
-        "variant_ids": [15],
+        "variant_ids": [
+          15
+        ],
         "group_id": "grass"
       },
       {
         "name": "Rule 9",
         "neighbors": [
-          [-1, 0],
-          [0, -1]
+          [
+            -1,
+            0
+          ],
+          [
+            0,
+            -1
+          ]
         ],
         "tileset_path": "../../assets/data/images/tiles.png",
         "tileset_index": 0,
-        "variant_ids": [16],
+        "variant_ids": [
+          16
+        ],
         "group_id": "grass"
       }
     ],
@@ -187,106 +277,196 @@
           {
             "name": "Rule 1",
             "neighbors": [
-              [1, 0],
-              [0, 1]
+              [
+                1,
+                0
+              ],
+              [
+                0,
+                1
+              ]
             ],
             "tileset_path": "../../assets/data/images/tiles.png",
             "tileset_index": 0,
-            "variant_ids": [0],
+            "variant_ids": [
+              0
+            ],
             "group_id": "grass"
           },
           {
             "name": "Rule 2",
             "neighbors": [
-              [-1, 0],
-              [1, 0],
-              [0, 1]
+              [
+                -1,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                0,
+                1
+              ]
             ],
             "tileset_path": "../../assets/data/images/tiles.png",
             "tileset_index": 0,
-            "variant_ids": [1],
+            "variant_ids": [
+              1
+            ],
             "group_id": "grass"
           },
           {
             "name": "Rule 3",
             "neighbors": [
-              [-1, 0],
-              [0, 1]
+              [
+                -1,
+                0
+              ],
+              [
+                0,
+                1
+              ]
             ],
             "tileset_path": "../../assets/data/images/tiles.png",
             "tileset_index": 0,
-            "variant_ids": [2],
+            "variant_ids": [
+              2
+            ],
             "group_id": "grass"
           },
           {
             "name": "Rule 4",
             "neighbors": [
-              [1, 0],
-              [0, -1],
-              [0, 1]
+              [
+                1,
+                0
+              ],
+              [
+                0,
+                -1
+              ],
+              [
+                0,
+                1
+              ]
             ],
             "tileset_path": "../../assets/data/images/tiles.png",
             "tileset_index": 0,
-            "variant_ids": [7],
+            "variant_ids": [
+              7
+            ],
             "group_id": "grass"
           },
           {
             "name": "Rule 5",
             "neighbors": [
-              [0, 1],
-              [1, 0],
-              [-1, 0],
-              [0, -1]
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                -1,
+                0
+              ],
+              [
+                0,
+                -1
+              ]
             ],
             "tileset_path": "../../assets/data/images/tiles.png",
             "tileset_index": 0,
-            "variant_ids": [8],
+            "variant_ids": [
+              8
+            ],
             "group_id": "grass"
           },
           {
             "name": "Rule 6",
             "neighbors": [
-              [-1, 0],
-              [0, -1],
-              [0, 1]
+              [
+                -1,
+                0
+              ],
+              [
+                0,
+                -1
+              ],
+              [
+                0,
+                1
+              ]
             ],
             "tileset_path": "../../assets/data/images/tiles.png",
             "tileset_index": 0,
-            "variant_ids": [9],
+            "variant_ids": [
+              9
+            ],
             "group_id": "grass"
           },
           {
             "name": "Rule 7",
             "neighbors": [
-              [1, 0],
-              [0, -1]
+              [
+                1,
+                0
+              ],
+              [
+                0,
+                -1
+              ]
             ],
             "tileset_path": "../../assets/data/images/tiles.png",
             "tileset_index": 0,
-            "variant_ids": [14],
+            "variant_ids": [
+              14
+            ],
             "group_id": "grass"
           },
           {
             "name": "Rule 8",
             "neighbors": [
-              [-1, 0],
-              [1, 0],
-              [0, -1]
+              [
+                -1,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                0,
+                -1
+              ]
             ],
             "tileset_path": "../../assets/data/images/tiles.png",
             "tileset_index": 0,
-            "variant_ids": [15],
+            "variant_ids": [
+              15
+            ],
             "group_id": "grass"
           },
           {
             "name": "Rule 9",
             "neighbors": [
-              [-1, 0],
-              [0, -1]
+              [
+                -1,
+                0
+              ],
+              [
+                0,
+                -1
+              ]
             ],
             "tileset_path": "../../assets/data/images/tiles.png",
             "tileset_index": 0,
-            "variant_ids": [16],
+            "variant_ids": [
+              16
+            ],
             "group_id": "grass"
           }
         ]
@@ -2531,12 +2711,6 @@
       },
       "5;11": {
         "pos": "5;11",
-        "ttype": 1,
-        "variant": 0,
-        "gid": 133
-      },
-      "13;11": {
-        "pos": "13;11",
         "ttype": 1,
         "variant": 0,
         "gid": 133
@@ -6362,12 +6536,6 @@
             "variant": 0,
             "gid": 133
           },
-          "13;11": {
-            "pos": "13;11",
-            "ttype": 1,
-            "variant": 0,
-            "gid": 133
-          },
           "4;11": {
             "pos": "4;11",
             "ttype": 2,
@@ -8259,18 +8427,6 @@
             "area": {
               "x": 440,
               "y": 10,
-              "w": 16,
-              "h": 16
-            },
-            "ttype": 4,
-            "tileset_type": "object",
-            "variant": 0,
-            "properties": {}
-          },
-          "6": {
-            "area": {
-              "x": 490,
-              "y": 154,
               "w": 16,
               "h": 16
             },

@@ -8,7 +8,7 @@ from tilemap_parser import (
     load_character_collision,
 )
 
-from src.entity.base import AnimationEntity
+from src.entity.base import CollidableAnimationEntity
 from src.settings import ANIMATION_PATH, CHARACTER_COLLISION_PATH
 
 RUN_SPEED = 150.0
@@ -29,7 +29,7 @@ def move_toward(current: float, target: float, by: float) -> float:
 TPlayerStates = Literal["idle", "jump", "run", "slide", "wallslide"]
 
 
-class Player(AnimationEntity):
+class Player(CollidableAnimationEntity):
     collision_path = CHARACTER_COLLISION_PATH / "player.collision.json"
     animation_path = ANIMATION_PATH / "player.anim.json"
     blend_flags = pygame.BLEND_RGBA_MAX
@@ -57,8 +57,8 @@ class Player(AnimationEntity):
         }
         self.current_state = "idle"
 
-    def update(self, dt: float):
-        self.shape_aabb = get_shape_aabb(self.x, self.y, self.collision_shape)
+    @override
+    def update_physics(self, dt: float):
         keys = pygame.key.get_pressed()
         movement_x = keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]
         self.jump_triggered = keys[pygame.K_SPACE]
@@ -70,7 +70,6 @@ class Player(AnimationEntity):
 
         self.vertical_movement(dt)
         self.horizontal_movement(dt)
-        self.update_animation(dt)
 
     def vertical_movement(self, dt: float):
         _, t, r, b = self.shape_aabb

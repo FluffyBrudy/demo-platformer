@@ -19,6 +19,7 @@ from tilemap_parser import (
 )
 
 from src.core.effects import ParticleConsumerPartial, particle_consumer
+from src.entity.base import CollidableAnimationEntity
 from src.entity.enemies.mushroom import Mushroom
 from src.entity.player import Player
 from src.settings import TILESET_COLLISION_PATH
@@ -49,7 +50,8 @@ class World:
         self.camera.lerp_speed = 5.0
 
         self.light_map = LightMap((viewport_w, viewport_h), scale=0.5, pixelated=True)
-        self.player_point_light = PointLight(radius=110, color=(100, 255, 255), falloff="exp", exponent=2, intensity=5)
+        self.player_point_light = PointLight(radius=110, color=(255, 255, 255), falloff="exp", exponent=2, intensity=5)
+        self.enemy_point_light = PointLight(radius=50, color=(255, 255, 255), falloff="linear")
 
         self._load_particles(map_data)
         self._load_objects(map_data)
@@ -105,9 +107,9 @@ class World:
                     particle.rect.h,
                 )
 
-    def is_ground_ahead(self, sprite: ICollidableSprite, direction: int) -> bool:
+    def is_ground_ahead(self, sprite: Mushroom) -> bool:
         left, _, right, bottom = get_shape_aabb(sprite.x, sprite.y, sprite.collision_shape)
-        probe_x = right + direction if sprite.vx > 0.001 else left - direction
+        probe_x = right + 1 if sprite.direction > 0.001 else left - 1
         probe_y = bottom + 1
         tile_x, tile_y = self.runner.get_tile_at(probe_x, probe_y)
         tile_id = self.physics_world.tile_map.get((tile_x, tile_y))
@@ -127,6 +129,7 @@ class World:
             system.update(dt, *self.node_areas[name])
 
         self.player_point_light.advance(dt)
+        self.enemy_point_light.advance(dt)
 
         for enemy in self.enemies:
             enemy.update(dt)
@@ -137,10 +140,15 @@ class World:
             nx, ny = res.normal
             self.player.vx = -nx * KNOCKBACK_FORCE
             self.player.vy = KNOCKBACK_UP * (-1 if ny < 0 else 1)
-            if abs(nx) < 0.01 and isinstance(other, Mushroom) and other.can_stun():
-                other.stun()
+            if abs(nx) < 0.01 and isinstance(other, Mushroom):
+                if other.can_stun():
+                    other.stun()
+            else:
+                self.camera.shake(0.5, 10)
 
     def render(self, screen: Surface) -> None:
+        self.light_map.clear()
+
         cam_x, cam_y = self.camera.offset
         for surf, x, y in self.map_objects:
             screen.blit(surf, (x - cam_x, y - cam_y))
@@ -151,7 +159,20 @@ class World:
 
         for enemy in self.enemies:
             enemy.render(screen, self.camera.offset)
-
-        self.light_map.clear()
-        self.player_point_light.render(self.light_map, self.player.x, self.player.y)
+            dx = self.player.x - enemy.x
+            dy = self.player.y - enemy.y
+            distance_squared = dx * dx + dy * dy
+            max_distance_squared = 700.0**2
+            i = max(
+                0.0,
+                1.0 - distance_squared / max_distance_squared,
+            )
+            self.enemy_point_light.intensity = i * i
+            left, top, right, bottom = enemy.shape_aabb
+            self.enemy_point_light.render(
+                self.light_map,
+                (left + right) * 0.5 - cam_x,
+                (top + bottom) * 0.5 - cam_y,
+            )
+        self.player_point_light.render(self.light_map, self.player.x - cam_x, self.player.y - cam_y)
         self.light_map.apply(screen, blend=blend.RGB_MULT)

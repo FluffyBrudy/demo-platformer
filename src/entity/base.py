@@ -3,17 +3,27 @@ from collections.abc import Callable
 
 import pygame
 from pygame.surface import Surface
-from tilemap_parser import AnimationPlayer, ICollidableSprite
+from tilemap_parser import AnimationPlayer, ICollidableSprite, get_shape_aabb
 
 from src.core.effects import ParticleConsumerPartial
 
 
-class AnimationEntity(ICollidableSprite, ABC):
+class CollidableAnimationEntity(ICollidableSprite, ABC):
     flipped: bool
     animation_states: dict[str, AnimationPlayer]
     current_state: str = ""
     emit: Callable[[ParticleConsumerPartial], None]
     blend_flags: int = 0
+    shape_aabb: tuple[float, float, float, float]
+
+    def update(self, dt: float) -> None:
+        self.shape_aabb = get_shape_aabb(self.x, self.y, self.collision_shape)
+        self.update_physics(dt)
+        self.update_animation(dt)
+
+    @abstractmethod
+    def update_physics(self, dt: float) -> None:
+        raise NotImplementedError
 
     @abstractmethod
     def get_state(self) -> str:
