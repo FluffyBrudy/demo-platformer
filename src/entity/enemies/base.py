@@ -37,7 +37,6 @@ class HorizontalGroundedEnemy(CollidableAnimationEntity, ABC):
         self.flipped = True
         self.walking = 0
         self.direction = -1
-        self.stun_time = 0
 
     @property
     def size(self) -> tuple[int, int]:
@@ -45,24 +44,6 @@ class HorizontalGroundedEnemy(CollidableAnimationEntity, ABC):
         if frame is None:
             raise TypeError("Unable to load frame size")
         return frame.size
-
-    def handle_target(self):
-        if self.target is None:
-            return
-        if not should_collide(self, self.target):  # pyright: ignore
-            return
-        tl, tt, tr, tb = self.target.shape_aabb
-        sl, st, sr, sb = self.shape_aabb
-        x_diff = (tl + tr) * 0.5 - (sl + sr) * 0.5
-        if abs(x_diff) < self.target_chase_range:
-            if abs(self.target.y - self.y) > max(tb - tt, sb - st):
-                return
-            if not self.ground_check(self):
-                self.walking = 0
-                return
-            self.direction = -1 if x_diff < 0 else 1
-            self.flipped = x_diff > 0
-            self.walking = int(self.speed)
 
     def handle_movement_x(self, res: CollisionResult, _dt: float):
         if not self.walking:

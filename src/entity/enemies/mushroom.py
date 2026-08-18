@@ -8,6 +8,7 @@ from tilemap_parser import (
     get_shape_aabb,
     load_character_collision,
 )
+from tilemap_parser.runtime.collision import should_collide
 
 from src.core.effects import ParticleConsumerPartial
 from src.entity.base import CollidableAnimationEntity
@@ -18,6 +19,7 @@ MUSHROOM_SPEED = 100
 MUSHROOM_GRAVITY = 800
 MUSHROOM_MAX_FALL_SPEED = 600
 TARGET_CHASE_RANGE = 200
+FEET_TOLERANCE = 8.0
 
 
 class Mushroom(HorizontalGroundedEnemy):
@@ -54,23 +56,60 @@ class Mushroom(HorizontalGroundedEnemy):
             "idle": AnimationPlayer(sprite_animation_set, "idle"),
             "attack": AnimationPlayer(sprite_animation_set, "attack"),
             "run": AnimationPlayer(sprite_animation_set, "run"),
-            "attack_with_stun": AnimationPlayer(sprite_animation_set, "attack_with_stun"),
             "hurt": AnimationPlayer(sprite_animation_set, "hurt"),
             "dead": AnimationPlayer(sprite_animation_set, "dead"),
             "stunned": AnimationPlayer(sprite_animation_set, "stunned"),
         }
         self.current_state = "idle"
+        self.stun_time = 0
+
+        self.is_attacking = False
 
     def can_stun(self):
-        return self.stun_time == 0 and self.current_state != "stunned"
+        falling = self.target is not None and self.target.vy >= 0
+        return self.stun_time == 0 and self.current_state != "stunned" and falling
 
     def stun(self):
         self.stun_time = 2
         self.current_state = "stunned"
+        self.is_attacking = False
         self.vx = 0
+
+    def can_damage(self):
+        return self.is_attacking and self.animation_states[self.current_state].frame_index > 3
+
+    def handle_target(self):
+        if self.target is None:
+            return
+        if not should_collide(self, self.target):  # pyright: ignore
+            return
+        if self.current_state == "stunned":
+            return
+        tl, _, tr, tb = self.target.shape_aabb
+        sl, _, sr, sb = self.shape_aabb
+        x_diff = (tl + tr) * 0.5 - (sl + sr) * 0.5
+
+        y_fail = abs(sb - tb) > FEET_TOLERANCE
+        if abs(x_diff) < min(tr - tl, sr - sl) and not y_fail:
+            self.is_attacking = True
+            self.walking = 0
+        elif abs(x_diff) < self.target_chase_range:
+            if y_fail:
+                return
+            if not self.ground_check(self):
+                self.walking = 0
+                return
+            self.direction = -1 if x_diff < 0 else 1
+            self.flipped = x_diff > 0
+            self.walking = MUSHROOM_SPEED
 
     @override
     def get_state(self) -> str:
+        if self.is_attacking:
+            if self.animation_states[self.current_state].finished:
+                self.is_attacking = False
+                return "idle"
+            return "attack"
         if self.stun_time != 0:
             return "stunned"
         if self.walking:

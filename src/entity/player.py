@@ -18,6 +18,8 @@ AIR_ACCEL = 1000.0
 JUMP_STRENGTH = -400
 MAX_FALL_SPEED = 600
 GRAVITY = 800
+KNOCKBACK_FORCE = 350.0
+KNOCKBACK_UP = -200.0
 
 
 def move_toward(current: float, target: float, by: float) -> float:
@@ -55,6 +57,8 @@ class Player(CollidableAnimationEntity):
         self.flipped = False
         self.jump_triggered = False
 
+        self.blend_flags = 0
+
         sprite_animation_set = SpriteAnimationSet.load(self.animation_path)
         self.animation_states: dict[str, AnimationPlayer] = {
             "idle": AnimationPlayer(sprite_animation_set, "idle"),
@@ -64,6 +68,10 @@ class Player(CollidableAnimationEntity):
             "wallslide": AnimationPlayer(sprite_animation_set, "wallslide"),
         }
         self.current_state = "idle"
+
+    def knockback(self, normal_x: float):
+        self.vx = normal_x * KNOCKBACK_FORCE
+        self.vy = KNOCKBACK_UP
 
     @override
     def update_physics(self, dt: float):
@@ -84,7 +92,9 @@ class Player(CollidableAnimationEntity):
         if self.jump_triggered and self.on_ground:
             self.vy = JUMP_STRENGTH
             self.on_ground = False
-            self.emit({"x": r, "y": (t + b) * 0.5, "name": "dashorb", "direction": -1, "count": 20})
+            self.emit(
+                {"x": r, "y": (t + b) * 0.5, "name": "dashorb", "direction": -1, "count": 20, "color": (137, 255, 102)}
+            )
 
         if not self.on_ground:
             self.vy = min(
@@ -104,9 +114,9 @@ class Player(CollidableAnimationEntity):
         l, _, r, b = self.shape_aabb
         if self.on_ground:
             if self.vx < 0:
-                self.emit({"x": r, "y": b, "name": "dashorb", "direction": 0, "count": 1})
+                self.emit({"x": r, "y": b, "name": "dashorb", "direction": 0, "count": 1, "color": (137, 255, 102)})
             elif self.vx > 0:
-                self.emit({"x": l, "y": b, "name": "dashorb", "direction": 180, "count": 1})
+                self.emit({"x": l, "y": b, "name": "dashorb", "direction": 180, "count": 1, "color": (137, 255, 102)})
 
     @override
     def get_state(self) -> TPlayerStates:
